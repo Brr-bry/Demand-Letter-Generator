@@ -31,7 +31,7 @@ public class Main {
                 new WordGenerator();
 
         generator.generate(
-                customers.get(1),
+                customers.get(0),
                 Path.of("output/output.docx"));
 
     }
