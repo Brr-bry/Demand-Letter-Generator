@@ -1,35 +1,39 @@
 package com.karesh.demandlettergenerator;
 
-import com.karesh.demandlettergenerator.generator.legacy.WordGeneratorPoiTl;
+import com.karesh.demandlettergenerator.generator.DocxInspector;
+import com.karesh.demandlettergenerator.generator.WordGenerator;
 import com.karesh.demandlettergenerator.model.Customer;
 import com.karesh.demandlettergenerator.parser.ExcelParser;
+import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 
-import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.List;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+
+        InputStream template =
+                Main.class.getResourceAsStream(
+                        "/templates/demandtemplate.docx");
+
+        if (template == null) {
+            throw new RuntimeException("Template not found.");
+        }
 
         ExcelParser parser = new ExcelParser();
 
-        try {
+        List<Customer> customers =
+                parser.parse(Path.of("input/raw_file.xlsx"));
 
-            List<Customer> customers = parser.parse(Path.of("input/raw_file.xlsx"));
+        WordGenerator generator =
+                new WordGenerator();
 
-            WordGeneratorPoiTl generator = new WordGeneratorPoiTl();
+        generator.generate(
+                customers.get(1),
+                Path.of("output/output.docx"));
 
-            generator.generate(
-
-                    customers.get(1),
-
-                    "output/Test.docx"
-
-            );
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
+
 }

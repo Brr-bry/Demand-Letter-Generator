@@ -31,7 +31,7 @@ public class WordGenerator {
 
         placeholderReplacer.replace(document, customer);
 
-        tableGenerator.generate(document, customer);
+        // tableGenerator.generate(document, customer);
 
         document.save(outputFile.toFile());
     }
