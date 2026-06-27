@@ -1,6 +1,7 @@
 package com.karesh.demandlettergenerator;
 
 import com.karesh.demandlettergenerator.model.Customer;
+import com.karesh.demandlettergenerator.model.Transaction;
 import com.karesh.demandlettergenerator.parser.ExcelParser;
 
 import java.io.IOException;
@@ -23,13 +24,26 @@ public class Main {
 
             for (Customer customer : customers) {
 
-                System.out.println("--------------------------------");
-                System.out.println("Name: " + customer.getFullName());
-                System.out.println("Phone: " + customer.getPhone());
-                System.out.println("Address: " + customer.getAddress());
+                System.out.println("========================================");
+                System.out.println(customer.getFullName());
 
-                System.out.println("Transactions: " +
-                        customer.getTransactions().size());
+                for (Transaction transaction : customer.getTransactions()) {
+
+                    System.out.println("--------------------------------");
+
+                    System.out.println("SO Number      : " + transaction.getSoNumber());
+                    System.out.println("TRA Number     : " + transaction.getTraNumber());
+                    System.out.println("Due Date       : " + transaction.getDueDate());
+                    System.out.println("Months         : " + transaction.getNumberOfMonths());
+                    System.out.println("Unsettled      : " + transaction.getUnsettledAmount());
+                    System.out.println("Total Due      : " + transaction.getTotalDue());
+
+                }
+
+                System.out.println();
+
+                System.out.println("Gross Total    : " + customer.getTotalGross());
+                System.out.println("With Penalty   : " + customer.getTotalIncludingPenalty());
 
             }
 

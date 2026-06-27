@@ -13,6 +13,20 @@ public class Transaction {
     private BigDecimal unsettledAmount;
     private int daysLapse;
     private BigDecimal penalty;
+    private int numberOfMonths;
+    private BigDecimal totalDue;
+
+    public int getNumberOfMonths() {
+        return numberOfMonths;
+    }
+
+    public void setNumberOfMonths(int numberOfMonths) {
+        this.numberOfMonths = numberOfMonths;
+    }
+
+    public void setTotalDue(BigDecimal totalDue) {
+        this.totalDue = totalDue;
+    }
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
@@ -87,6 +101,26 @@ public class Transaction {
     }
 
     public BigDecimal getTotalDue() {
-        return unsettledAmount.add(penalty);
+
+        BigDecimal penaltyRate = new BigDecimal("0.03");
+
+        BigDecimal monthlyPenalty = unsettledAmount.multiply(penaltyRate);
+
+        BigDecimal totalPenalty = monthlyPenalty.multiply(BigDecimal.valueOf(numberOfMonths));
+
+        return unsettledAmount.add(totalPenalty);
+    }
+
+    public void calculateTotalDue() {
+
+        BigDecimal penaltyRate = new BigDecimal("0.03");
+
+        BigDecimal monthlyPenalty =
+                unsettledAmount.multiply(penaltyRate);
+
+        BigDecimal totalPenalty =
+                monthlyPenalty.multiply(BigDecimal.valueOf(numberOfMonths));
+
+        this.totalDue = unsettledAmount.add(totalPenalty);
     }
 }

@@ -11,8 +11,10 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class ExcelParser {
     private final DataFormatter formatter = new DataFormatter();
@@ -50,6 +52,9 @@ public class ExcelParser {
                             currentCustomer.setFullName(
                                     getCellValue(sheet.getRow(i - 5), 2));
 
+                            currentCustomer.setLastName(
+                                    getCellValue(sheet.getRow(i),4));
+
                             currentCustomer.setPhone(
                                     getCellValue(sheet.getRow(i - 4), 2));
 
@@ -79,6 +84,11 @@ public class ExcelParser {
                     case READING_TRANSACTIONS:
 
                         if (containsText(row, TOTAL_MARKER)) {
+                            currentCustomer.setTotalGross(
+                                    calculateCustomerGross(currentCustomer));
+
+                            currentCustomer.setTotalIncludingPenalty(
+                                    calculateCustomerTotal(currentCustomer));
 
                             customers.add(currentCustomer);
 
@@ -121,6 +131,11 @@ public class ExcelParser {
 
                             transaction.setPenalty(
                                     parseMoney(getCellValue(row, 20)));
+
+                            transaction.setNumberOfMonths(
+                                    calculateNumberOfMonths(transaction.getDueDate()));
+
+                            transaction.calculateTotalDue();
 
                             currentCustomer.getTransactions().add(transaction);
 
@@ -216,5 +231,40 @@ public class ExcelParser {
         }
 
         return LocalDate.parse(value);
+    }
+
+    private int calculateNumberOfMonths(LocalDate dueDate) {
+
+        if (dueDate == null || dueDate.isAfter(LocalDate.now())) {
+            return 0;
+        }
+
+        LocalDate today = LocalDate.now();
+
+        int months = Period.between(dueDate, today).getYears() * 12
+                + Period.between(dueDate, today).getMonths();
+
+        //if (today.getDayOfMonth() > dueDate.getDayOfMonth()) {months++;}
+
+        return months;
+    }
+
+    private BigDecimal calculateCustomerGross(Customer customer) {
+
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (Transaction transaction : customer.getTransactions()) {
+
+            total = total.add(transaction.getTotalDue());
+
+        }
+
+        return total;
+    }
+
+    private BigDecimal calculateCustomerTotal(Customer customer) {
+
+        return calculateCustomerGross(customer)
+                .add(new BigDecimal("1500"));
     }
 }

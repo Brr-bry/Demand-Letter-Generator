@@ -13,8 +13,26 @@ public class Customer {
     private String address;
     private String phone;
 
-    private BigDecimal totalOverdueIncludingPenalty;
-    private String amountInWords;
+    private BigDecimal totalIncludingPenalty;
+
+    private BigDecimal totalGross;
+
+    public void setTotalGross(BigDecimal totalGross) {
+        this.totalGross = totalGross;
+    }
+
+    public void setTotalIncludingPenalty(BigDecimal totalIncludingPenalty) {
+        this.totalIncludingPenalty = totalIncludingPenalty;
+    }
+
+    public BigDecimal getTotalIncludingPenalty() {
+        return totalIncludingPenalty;
+    }
+
+    public BigDecimal getTotalGross() {
+        return totalGross;
+    }
+
 
     private List<Transaction> transactions = new ArrayList<>();
 
@@ -40,14 +58,6 @@ public class Customer {
 
     public String getPhone() {
         return phone;
-    }
-
-    public BigDecimal gettotalOverdueIncludingPenalty() {
-        return totalOverdueIncludingPenalty;
-    }
-
-    public String getAmountInWords() {
-        return amountInWords;
     }
 
     public List<Transaction> getTransactions() {
@@ -78,13 +88,7 @@ public class Customer {
         this.phone = phone;
     }
 
-    public void settotalOverdueIncludingPenalty(BigDecimal totalOverdueIncludingPenalty) {
-        this.totalOverdueIncludingPenalty = totalOverdueIncludingPenalty;
-    }
 
-    public void setAmountInWords(String amountInWords) {
-        this.amountInWords = amountInWords;
-    }
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
