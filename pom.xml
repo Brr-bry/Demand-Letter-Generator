@@ -34,6 +34,13 @@
             <version>${docx4j.version}</version>
         </dependency>
 
+        <!-- poi-tl (Better Word Document Formatting) -->
+        <dependency>
+            <groupId>com.deepoove</groupId>
+            <artifactId>poi-tl</artifactId>
+            <version>1.12.2</version>
+        </dependency>
+
         <!-- JavaFX -->
         <dependency>
             <groupId>org.openjfx</groupId>

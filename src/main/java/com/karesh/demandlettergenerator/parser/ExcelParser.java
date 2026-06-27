@@ -56,7 +56,7 @@ public class ExcelParser {
                                     getCellValue(sheet.getRow(i),4));
 
                             currentCustomer.setPhone(
-                                    getCellValue(sheet.getRow(i - 4), 2));
+                                    "0" + getCellValue(sheet.getRow(i - 4), 2));
 
                             currentCustomer.setAddress(
                                     getCellValue(sheet.getRow(i - 2), 2));
@@ -247,7 +247,7 @@ public class ExcelParser {
         int months = Period.between(dueDate, today).getYears() * 12
                 + Period.between(dueDate, today).getMonths();
 
-        if (today.getDayOfMonth() > dueDate.getDayOfMonth()) {months++;}
+        //if (today.getDayOfMonth() > dueDate.getDayOfMonth()) {months++;}
 
         return months;
     }

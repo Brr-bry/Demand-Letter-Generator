@@ -25,7 +25,7 @@ public class Main {
 
                     customers.get(1),
 
-                    "output/Test.docx"
+                    Path.of("output/Test.docx")
 
             );
 
