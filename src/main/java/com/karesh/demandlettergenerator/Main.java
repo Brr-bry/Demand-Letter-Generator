@@ -1,5 +1,6 @@
 package com.karesh.demandlettergenerator;
 
+import com.karesh.demandlettergenerator.generator.WordGenerator;
 import com.karesh.demandlettergenerator.model.Customer;
 import com.karesh.demandlettergenerator.model.Transaction;
 import com.karesh.demandlettergenerator.parser.ExcelParser;
@@ -16,36 +17,17 @@ public class Main {
 
         try {
 
-            List<Customer> customers =
-                    parser.parse(Path.of("input/raw_file.xlsx"));
+            List<Customer> customers = parser.parse(Path.of("input/raw_file.xlsx"));
 
+            WordGenerator generator = new WordGenerator();
 
-            System.out.println("Customers Parsed: " + customers.size());
+            generator.generate(
 
-            for (Customer customer : customers) {
+                    customers.get(1),
 
-                System.out.println("========================================");
-                System.out.println(customer.getFullName());
+                    "output/Test.docx"
 
-                for (Transaction transaction : customer.getTransactions()) {
-
-                    System.out.println("--------------------------------");
-
-                    System.out.println("SO Number      : " + transaction.getSoNumber());
-                    System.out.println("TRA Number     : " + transaction.getTraNumber());
-                    System.out.println("Due Date       : " + transaction.getDueDate());
-                    System.out.println("Months         : " + transaction.getNumberOfMonths());
-                    System.out.println("Unsettled      : " + transaction.getUnsettledAmount());
-                    System.out.println("Total Due      : " + transaction.getTotalDue());
-
-                }
-
-                System.out.println();
-
-                System.out.println("Gross Total    : " + customer.getTotalGross());
-                System.out.println("With Penalty   : " + customer.getTotalIncludingPenalty());
-
-            }
+            );
 
         } catch (IOException e) {
             e.printStackTrace();

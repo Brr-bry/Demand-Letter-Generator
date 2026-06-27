@@ -1,5 +1,7 @@
 package com.karesh.demandlettergenerator.model;
 
+import com.karesh.demandlettergenerator.util.NumberToWords;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.math.BigDecimal;
@@ -43,6 +45,10 @@ public class Customer {
 
 
     private List<Transaction> transactions = new ArrayList<>();
+
+    public String getTotalInWords() {
+        return NumberToWords.convert(totalIncludingPenalty);
+    }
 
     public String getBranch() {
         return branch;
