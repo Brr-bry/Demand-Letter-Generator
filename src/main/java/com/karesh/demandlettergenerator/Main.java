@@ -1,8 +1,7 @@
 package com.karesh.demandlettergenerator;
 
-import com.karesh.demandlettergenerator.generator.WordGenerator;
+import com.karesh.demandlettergenerator.generator.legacy.WordGeneratorPoiTl;
 import com.karesh.demandlettergenerator.model.Customer;
-import com.karesh.demandlettergenerator.model.Transaction;
 import com.karesh.demandlettergenerator.parser.ExcelParser;
 
 import java.io.IOException;
@@ -19,7 +18,7 @@ public class Main {
 
             List<Customer> customers = parser.parse(Path.of("input/raw_file.xlsx"));
 
-            WordGenerator generator = new WordGenerator();
+            WordGeneratorPoiTl generator = new WordGeneratorPoiTl();
 
             generator.generate(
 
