@@ -13,7 +13,7 @@ public class Customer {
     private String address;
     private String phone;
 
-    private BigDecimal totalOverdue;
+    private BigDecimal totalOverdueIncludingPenalty;
     private String amountInWords;
 
     private List<Transaction> transactions = new ArrayList<>();
@@ -42,8 +42,8 @@ public class Customer {
         return phone;
     }
 
-    public BigDecimal getTotalOverdue() {
-        return totalOverdue;
+    public BigDecimal gettotalOverdueIncludingPenalty() {
+        return totalOverdueIncludingPenalty;
     }
 
     public String getAmountInWords() {
@@ -78,8 +78,8 @@ public class Customer {
         this.phone = phone;
     }
 
-    public void setTotalOverdue(BigDecimal totalOverdue) {
-        this.totalOverdue = totalOverdue;
+    public void settotalOverdueIncludingPenalty(BigDecimal totalOverdueIncludingPenalty) {
+        this.totalOverdueIncludingPenalty = totalOverdueIncludingPenalty;
     }
 
     public void setAmountInWords(String amountInWords) {
