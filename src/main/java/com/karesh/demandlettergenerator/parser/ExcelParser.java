@@ -244,7 +244,7 @@ public class ExcelParser {
         int months = Period.between(dueDate, today).getYears() * 12
                 + Period.between(dueDate, today).getMonths();
 
-        //if (today.getDayOfMonth() > dueDate.getDayOfMonth()) {months++;}
+        if (today.getDayOfMonth() > dueDate.getDayOfMonth()) {months++;}
 
         return months;
     }
