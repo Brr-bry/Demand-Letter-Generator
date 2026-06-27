@@ -90,6 +90,9 @@ public class ExcelParser {
                             currentCustomer.setTotalIncludingPenalty(
                                     calculateCustomerTotal(currentCustomer));
 
+                            currentCustomer.setHighestNumberOfMonths(
+                                    calculateHighestNumberOfMonths(currentCustomer));
+
                             customers.add(currentCustomer);
 
                             System.out.println("Customer Completed");
@@ -266,5 +269,20 @@ public class ExcelParser {
 
         return calculateCustomerGross(customer)
                 .add(new BigDecimal("1500"));
+    }
+
+    private int calculateHighestNumberOfMonths(Customer customer) {
+
+        int highest = 0;
+
+        for (Transaction transaction : customer.getTransactions()) {
+
+            if (transaction.getNumberOfMonths() > highest) {
+                highest = transaction.getNumberOfMonths();
+            }
+
+        }
+
+        return highest;
     }
 }

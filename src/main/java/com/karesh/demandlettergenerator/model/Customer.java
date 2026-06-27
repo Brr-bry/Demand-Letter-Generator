@@ -12,10 +12,18 @@ public class Customer {
     private String lastName;
     private String address;
     private String phone;
-
+    private int highestNumberOfMonths;
     private BigDecimal totalIncludingPenalty;
 
     private BigDecimal totalGross;
+
+    public void setHighestNumberOfMonths(int highestNumberOfMonths) {
+        this.highestNumberOfMonths = highestNumberOfMonths;
+    }
+
+    public int getHighestNumberOfMonths() {
+        return highestNumberOfMonths;
+    }
 
     public void setTotalGross(BigDecimal totalGross) {
         this.totalGross = totalGross;
