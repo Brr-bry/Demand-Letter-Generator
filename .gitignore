@@ -43,4 +43,3 @@ input/*
 !input/.gitkeep
 
 generated/*
-!generated/.gitkeepg

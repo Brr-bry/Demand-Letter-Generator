@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.karesh.demandlettergenerator.controller.MainController"
+      spacing="18"
+      alignment="TOP_CENTER"
+      prefWidth="900"
+      prefHeight="650">
+
+    <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+    </padding>
+
+    <Label text="Demand Letter Generator"
+           style="-fx-font-size:24px;-fx-font-weight:bold;" />
+
+    <Separator/>
+
+    <Label text="Excel File"/>
+
+    <HBox spacing="10">
+
+        <TextField
+                fx:id="fileField"
+                editable="false"
+                HBox.hgrow="ALWAYS"/>
+
+        <Button
+                text="Browse"
+                onAction="#browseFile"/>
+
+    </HBox>
+
+    <Button
+            fx:id="generateButton"
+            text="Generate Demand Letters"
+            prefWidth="250"
+            disable="true"
+            onAction="#generateLetters"/>
+
+    <Separator/>
+
+    <Label text="Status"/>
+
+    <Label
+            fx:id="statusLabel"
+            text="Ready"
+            textAlignment="CENTER"
+            alignment="CENTER"
+        />
+    <Label wrapText="true" />
+    <Label
+            fx:id="customerLabel"
+            text="-"/>
+
+    <ProgressBar
+            fx:id="progressBar"
+            progress="0"
+            prefWidth="600"/>
+
+
+    <Region VBox.vgrow="ALWAYS"/>
+
+    <HBox spacing="20"
+          alignment="CENTER">
+
+        <Button
+                text="Open Latest Batch"
+                onAction="#openLatestBatch"/>
+
+        <Button
+                text="Open Generated Folder"
+                onAction="#openGeneratedFolder"/>
+
+    </HBox>
+
+</VBox>

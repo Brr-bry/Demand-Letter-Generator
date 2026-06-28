@@ -79,7 +79,7 @@
                 <configuration>
 
                     <mainClass>
-                        com.yourcompany.demandletter.Main
+                        com.karesh.demandlettergenerator.ui.App
                     </mainClass>
 
                 </configuration>
