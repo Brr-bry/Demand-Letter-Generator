@@ -21,6 +21,19 @@ public class ExcelParser {
     private final String CUSTOMER_MARKER = "Dear Mr/Ms/Mrs.:";
     private final String TABLE_MARKER = "SO No.";
     private final String TOTAL_MARKER = "Total Overdue including penalties:";
+
+
+
+    private int customersFound;
+
+    public void setCustomersFound(int customersFound) {
+        this.customersFound = customersFound;
+    }
+
+    public int getCustomersFound() {
+        return customersFound;
+    }
+
     public List<Customer> parse(Path excelFile) throws IOException {
 
         List<Customer> customers = new ArrayList<>();
@@ -44,22 +57,19 @@ public class ExcelParser {
 
                         if (containsText(row, CUSTOMER_MARKER)) {
 
+                            customersFound++;
+
                             System.out.println("--------------------------------");
-                            System.out.println("Customer Found");
+                            System.out.println("Customer " + customersFound + " Found");
 
                             currentCustomer = new Customer();
 
-                            currentCustomer.setFullName(
-                                    getCellValue(sheet.getRow(i - 5), 2));
+                            // Dynamically extract customer details
+                            extractCustomerDetails(sheet, i, currentCustomer);
 
+                            // Last name is still read from the Dear row
                             currentCustomer.setLastName(
-                                    getCellValue(sheet.getRow(i),4));
-
-                            currentCustomer.setPhone(
-                                    "0" + getCellValue( sheet.getRow(i - 4), 2));
-
-                            currentCustomer.setAddress(
-                                    getCellValue(sheet.getRow(i - 2), 2));
+                                    getCellValue(sheet.getRow(i), 4));
 
                             System.out.println(currentCustomer.getFullName());
                             System.out.println(currentCustomer.getPhone());
@@ -153,6 +163,77 @@ public class ExcelParser {
         return customers;
     }
 
+    private void extractCustomerDetails(
+            Sheet sheet,
+            int dearRow,
+            Customer customer) {
+
+        String phone = "";
+
+        List<String> values = new ArrayList<>();
+
+        for (int row = dearRow - 1;
+             row >= 0 && row >= dearRow - 20;
+             row--) {
+
+
+            String value = getCellValue(sheet.getRow(row), 2).trim();
+            System.out.println("ROW " + row + " = [" + value + "]");
+            if (value.isBlank()) {
+                continue;
+            }
+
+            if (value.equalsIgnoreCase(
+                    "Kindly give this letter preferential attention.")) {
+                break;
+            }
+
+            if (phone.isEmpty() && looksLikePhone(value)) {
+                phone = "0" + value;
+                continue;
+            }
+            values.add(value);
+
+
+        }
+
+        String address = "";
+        String fullName = "";
+
+        if (values.size() >= 1) {
+            address = values.get(0);
+        }
+
+        if (values.size() >= 2) {
+            address = values.get(values.size() - 2);
+            fullName = values.get(values.size() - 1);
+        }
+
+        customer.setAddress(address);
+        customer.setPhone(phone);
+        customer.setFullName(fullName);
+    }
+
+    private boolean looksLikePhone(String value) {
+
+        String digits =
+                value.replaceAll("\\D", "");
+
+        return digits.length() >= 7;
+    }
+
+    private String cleanText(String value) {
+
+        if (value == null) {
+            return "";
+        }
+
+        return value
+                .trim()
+                .replaceFirst("^\\\\\\s*", "")   // leading backslashes
+                .replaceAll("\\s+", " ");        // multiple spaces
+    }
+
     private String getCellValue(Row row, int columnIndex) {
 
         if (row == null) {
@@ -164,8 +245,7 @@ public class ExcelParser {
         if (cell == null) {
             return "";
         }
-
-        return formatter.formatCellValue(cell).trim();
+        return cleanText(formatter.formatCellValue(cell));
     }
 
 

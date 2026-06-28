@@ -1,13 +1,14 @@
 package com.karesh.demandlettergenerator;
 
-import com.karesh.demandlettergenerator.generator.DocxInspector;
 import com.karesh.demandlettergenerator.generator.WordGenerator;
 import com.karesh.demandlettergenerator.model.Customer;
 import com.karesh.demandlettergenerator.parser.ExcelParser;
-import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import com.karesh.demandlettergenerator.util.FileNameUtils;
+import com.karesh.demandlettergenerator.util.OutputManager;
 
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.sql.SQLOutput;
 import java.util.List;
 
 public class Main {
@@ -30,10 +31,26 @@ public class Main {
         WordGenerator generator =
                 new WordGenerator();
 
-        generator.generate(
-                customers.get(0),
-                Path.of("output/output.docx"));
+        Path batchFolder =
+                OutputManager.createBatchFolder();
 
+        int generated = 0;
+        int fileNo = 1;
+
+        for (Customer customer : customers) {
+
+            Path output =
+                    batchFolder.resolve(
+                            FileNameUtils.build(customer, fileNo));
+
+            System.out.println(output);
+
+            generator.generate(customer, output);
+
+            generated++;
+            fileNo++;
+        }
+
+        System.out.println("Generated " + generated + " documents.");
     }
-
 }
