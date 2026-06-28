@@ -92,7 +92,7 @@ public class MainController {
 
             new Alert(
                     Alert.AlertType.WARNING,
-                    "Please select an Excel file.")
+                    "Please select an .xlsx Excel file.")
                     .showAndWait();
 
             return;
@@ -133,7 +133,7 @@ public class MainController {
             alert.setHeaderText("Demand Letters Generated Successfully");
 
             alert.setContentText(
-                    "The demand letters have been generated successfully.\n\n"
+                    "The demand letters have been generated successfully.\nMake sure to review the documents before printing.\n\n"
                             + "Output Folder:\n\n"
                             + latestBatch.toAbsolutePath()
             );

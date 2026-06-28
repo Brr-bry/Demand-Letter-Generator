@@ -21,7 +21,7 @@
 
     <Separator/>
 
-    <Label text="Excel File"/>
+    <Label text="Excel File (.xlsx)"/>
 
     <HBox spacing="10">
 
