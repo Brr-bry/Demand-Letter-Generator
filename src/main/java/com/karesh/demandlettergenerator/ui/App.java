@@ -3,7 +3,9 @@ package com.karesh.demandlettergenerator.ui;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import java.util.Objects;
 
 public class App extends Application {
 
@@ -23,6 +25,15 @@ public class App extends Application {
         stage.setMinWidth(900);
         stage.setMinHeight(650);
 
+        stage.setScene(scene);
+
+        stage.getIcons().add(
+                new Image(
+                        Objects.requireNonNull(
+                                getClass().getResourceAsStream("/icons/app.png")
+                        )
+                )
+        );
         stage.show();
     }
 
