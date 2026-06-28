@@ -104,9 +104,11 @@ public class Transaction {
 
         BigDecimal penaltyRate = new BigDecimal("0.03");
 
-        BigDecimal monthlyPenalty = unsettledAmount.multiply(penaltyRate);
+        BigDecimal monthlyPenalty =
+                unsettledAmount.multiply(penaltyRate);
 
-        BigDecimal totalPenalty = monthlyPenalty.multiply(BigDecimal.valueOf(numberOfMonths));
+        BigDecimal totalPenalty =
+                monthlyPenalty.multiply(BigDecimal.valueOf(numberOfMonths));
 
         return unsettledAmount.add(totalPenalty);
     }

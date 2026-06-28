@@ -94,14 +94,9 @@ public class ExcelParser {
                     case READING_TRANSACTIONS:
 
                         if (containsText(row, TOTAL_MARKER)) {
-                            currentCustomer.setTotalGross(
-                                    calculateCustomerGross(currentCustomer));
-
-                            currentCustomer.setTotalIncludingPenalty(
-                                    calculateCustomerTotal(currentCustomer));
-
-                            currentCustomer.setHighestNumberOfMonths(
-                                    calculateHighestNumberOfMonths(currentCustomer));
+                            currentCustomer.calculateTotalGross();
+                            currentCustomer.calculateTotalIncludingPenalty();
+                            currentCustomer.calculateHighestNumberOfMonths();
 
                             customers.add(currentCustomer);
 
@@ -330,39 +325,5 @@ public class ExcelParser {
         if (today.getDayOfMonth() > dueDate.getDayOfMonth()) {months++;}
 
         return months;
-    }
-
-    private BigDecimal calculateCustomerGross(Customer customer) {
-
-        BigDecimal total = BigDecimal.ZERO;
-
-        for (Transaction transaction : customer.getTransactions()) {
-
-            total = total.add(transaction.getTotalDue());
-
-        }
-
-        return total;
-    }
-
-    private BigDecimal calculateCustomerTotal(Customer customer) {
-
-        return calculateCustomerGross(customer)
-                .add(new BigDecimal("1500"));
-    }
-
-    private int calculateHighestNumberOfMonths(Customer customer) {
-
-        int highest = 0;
-
-        for (Transaction transaction : customer.getTransactions()) {
-
-            if (transaction.getNumberOfMonths() > highest) {
-                highest = transaction.getNumberOfMonths();
-            }
-
-        }
-
-        return highest;
     }
 }

@@ -44,7 +44,7 @@ public class Main {
                             FileNameUtils.build(customer, fileNo));
 
             System.out.println(output);
-
+            System.out.println(customer.getHighestNumberOfMonths());
             generator.generate(customer, output);
 
             generated++;

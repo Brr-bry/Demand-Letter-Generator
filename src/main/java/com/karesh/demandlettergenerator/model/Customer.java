@@ -27,13 +27,6 @@ public class Customer {
         return highestNumberOfMonths;
     }
 
-    public void setTotalGross(BigDecimal totalGross) {
-        this.totalGross = totalGross;
-    }
-
-    public void setTotalIncludingPenalty(BigDecimal totalIncludingPenalty) {
-        this.totalIncludingPenalty = totalIncludingPenalty;
-    }
 
     public BigDecimal getTotalIncludingPenalty() {
         return totalIncludingPenalty;
@@ -106,5 +99,42 @@ public class Customer {
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
+    }
+
+    public void calculateTotalGross() {
+
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (Transaction tx : transactions) {
+            total = total.add(tx.getUnsettledAmount());
+        }
+
+        this.totalGross = total;
+    }
+
+    public void calculateTotalIncludingPenalty() {
+
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (Transaction tx : transactions) {
+            total = total.add(tx.getTotalDue());
+        }
+
+        total = total.add(new BigDecimal("1500"));
+
+        this.totalIncludingPenalty = total;
+    }
+
+    public void calculateHighestNumberOfMonths() {
+
+        int highest = 0;
+
+        for (Transaction tx : transactions) {
+            if (tx.getNumberOfMonths() > highest) {
+                highest = tx.getNumberOfMonths();
+            }
+        }
+
+        this.highestNumberOfMonths = highest;
     }
 }
