@@ -1,10 +1,12 @@
 package com.karesh.demandlettergenerator.controller;
 
 import com.karesh.demandlettergenerator.service.GenerationService;
+import com.karesh.demandlettergenerator.util.OutputManager;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
+import java.util.prefs.Preferences;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -34,6 +36,11 @@ public class MainController {
 
     private Path latestBatch;
 
+    private final Preferences preferences =
+            Preferences.userNodeForPackage(MainController.class);
+
+    private static final String LAST_FOLDER = "last_excel_folder";
+
     @FXML
     private void browseFile() {
 
@@ -42,22 +49,41 @@ public class MainController {
         chooser.setTitle("Select Excel File");
 
         chooser.getExtensionFilters().add(
+
                 new FileChooser.ExtensionFilter(
+
                         "Excel Files",
-                        "*.xlsx"));
+
+                        "*.xlsx"
+
+                )
+
+        );
+
+        // Restore the last folder if available
+        String lastFolder = preferences.get(LAST_FOLDER, null);
+
+        if (lastFolder != null) {
+
+            File folder = new File(lastFolder);
+
+            if (folder.exists() && folder.isDirectory()) {
+
+                chooser.setInitialDirectory(folder);
+
+            }
+
+        }
 
         selectedFile = chooser.showOpenDialog(null);
 
         if (selectedFile == null) {
-
             return;
-
         }
 
-        String name =
-                selectedFile.getName().toLowerCase();
+        String fileName = selectedFile.getName().toLowerCase();
 
-        if (!name.endsWith(".xlsx")) {
+        if (!fileName.endsWith(".xlsx")) {
 
             new Alert(
 
@@ -67,19 +93,29 @@ public class MainController {
 
             ).showAndWait();
 
-
+            selectedFile = null;
 
             fileField.clear();
-            selectedFile = null;
 
             generateButton.setDisable(true);
 
             return;
-
         }
 
+        // Save folder for next time
+        preferences.put(
+
+                LAST_FOLDER,
+
+                selectedFile.getParent()
+
+        );
+
         fileField.setText(
-                selectedFile.getAbsolutePath());
+
+                selectedFile.getAbsolutePath()
+
+        );
 
         generateButton.setDisable(false);
 
@@ -237,8 +273,7 @@ public class MainController {
 
         try {
 
-            Desktop.getDesktop().open(
-                    latestBatch.toFile());
+            Desktop.getDesktop().open(latestBatch.toFile());
 
         }
 
@@ -255,22 +290,20 @@ public class MainController {
 
         try {
 
-            Path generated =
-                    Path.of("generated");
+            Path folder = OutputManager.getGeneratedRoot();
 
-            if (!generated.toFile().exists()) {
+            if (!folder.toFile().exists()) {
 
                 new Alert(
                         Alert.AlertType.INFORMATION,
-                        "No generated folder exists yet.")
+                        "No generated files found.")
                         .showAndWait();
 
                 return;
 
             }
 
-            Desktop.getDesktop().open(
-                    generated.toFile());
+            Desktop.getDesktop().open(folder.toFile());
 
         }
 

@@ -3,35 +3,54 @@ package com.karesh.demandlettergenerator.util;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class OutputManager {
+public final class OutputManager {
 
+    private OutputManager() {
+    }
+
+    /**
+     * Documents/Demand Letters
+     */
+    public static Path getGeneratedRoot() {
+
+        return Path.of(
+                System.getProperty("user.home"),
+                "Documents",
+                "Demand Letters"
+        );
+
+    }
+
+    /**
+     * Documents/Demand Letters/2026/JUNE/Batch_xxx
+     */
     public static Path createBatchFolder() throws IOException {
 
-        LocalDateTime now = LocalDateTime.now();
+        LocalDate today = LocalDate.now();
 
-        String year =
-                now.format(DateTimeFormatter.ofPattern("yyyy"));
+        String year = String.valueOf(today.getYear());
 
-        String month =
-                now.format(DateTimeFormatter.ofPattern("MM-MMMM"));
+        String month = today.getMonth().name();
 
         String batch =
-                "Batch-" +
-                        now.format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
+                "Batch_" +
+                        LocalDateTime.now().format(
+                                DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss"));
 
-        Path folder = Path.of(
-                "generated",
-                year,
-                month,
-                batch
-        );
+        Path folder =
+                getGeneratedRoot()
+                        .resolve(year)
+                        .resolve(month)
+                        .resolve(batch);
 
         Files.createDirectories(folder);
 
         return folder;
+
     }
 
 }

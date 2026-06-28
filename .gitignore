@@ -46,3 +46,5 @@ generated/*
 
 out/*
 
+installer/*
+logs
