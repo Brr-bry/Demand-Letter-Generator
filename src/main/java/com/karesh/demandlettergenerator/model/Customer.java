@@ -1,5 +1,7 @@
 package com.karesh.demandlettergenerator.model;
 
+import com.karesh.demandlettergenerator.util.NumberToWords;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.math.BigDecimal;
@@ -12,11 +14,34 @@ public class Customer {
     private String lastName;
     private String address;
     private String phone;
+    private int highestNumberOfMonths;
+    private BigDecimal totalIncludingPenalty;
 
-    private BigDecimal totalOverdue;
-    private String amountInWords;
+    private BigDecimal totalGross;
+
+    public void setHighestNumberOfMonths(int highestNumberOfMonths) {
+        this.highestNumberOfMonths = highestNumberOfMonths;
+    }
+
+    public int getHighestNumberOfMonths() {
+        return highestNumberOfMonths;
+    }
+
+
+    public BigDecimal getTotalIncludingPenalty() {
+        return totalIncludingPenalty;
+    }
+
+    public BigDecimal getTotalGross() {
+        return totalGross;
+    }
+
 
     private List<Transaction> transactions = new ArrayList<>();
+
+    public String getTotalInWords() {
+        return NumberToWords.convert(totalIncludingPenalty);
+    }
 
     public String getBranch() {
         return branch;
@@ -40,14 +65,6 @@ public class Customer {
 
     public String getPhone() {
         return phone;
-    }
-
-    public BigDecimal getTotalOverdue() {
-        return totalOverdue;
-    }
-
-    public String getAmountInWords() {
-        return amountInWords;
     }
 
     public List<Transaction> getTransactions() {
@@ -78,15 +95,46 @@ public class Customer {
         this.phone = phone;
     }
 
-    public void setTotalOverdue(BigDecimal totalOverdue) {
-        this.totalOverdue = totalOverdue;
-    }
 
-    public void setAmountInWords(String amountInWords) {
-        this.amountInWords = amountInWords;
-    }
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
+    }
+
+    public void calculateTotalGross() {
+
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (Transaction tx : transactions) {
+            total = total.add(tx.getTotalDue());
+        }
+
+        this.totalGross = total;
+    }
+
+    public void calculateTotalIncludingPenalty() {
+
+
+
+        BigDecimal penalty = totalGross
+                .multiply(new BigDecimal("0.03"))
+                .multiply(BigDecimal.valueOf(highestNumberOfMonths));
+
+        this.totalIncludingPenalty = totalGross
+                .add(penalty)
+                .add(new BigDecimal("1500"));
+    }
+
+    public void calculateHighestNumberOfMonths() {
+
+        int highest = 0;
+
+        for (Transaction tx : transactions) {
+            if (tx.getNumberOfMonths() > highest) {
+                highest = tx.getNumberOfMonths();
+            }
+        }
+
+        this.highestNumberOfMonths = highest;
     }
 }

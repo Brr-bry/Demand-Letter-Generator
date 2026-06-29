@@ -37,3 +37,14 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+
+input/*
+!input/.gitkeep
+
+generated/*
+
+out/*
+
+installer/*
+logs
