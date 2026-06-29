@@ -114,15 +114,15 @@ public class Customer {
 
     public void calculateTotalIncludingPenalty() {
 
-        BigDecimal total = BigDecimal.ZERO;
 
-        for (Transaction tx : transactions) {
-            total = total.add(tx.getTotalDue());
-        }
 
-        total = total.add(new BigDecimal("1500"));
+        BigDecimal penalty = totalGross
+                .multiply(new BigDecimal("0.03"))
+                .multiply(BigDecimal.valueOf(highestNumberOfMonths));
 
-        this.totalIncludingPenalty = total;
+        this.totalIncludingPenalty = totalGross
+                .add(penalty)
+                .add(new BigDecimal("1500"));
     }
 
     public void calculateHighestNumberOfMonths() {

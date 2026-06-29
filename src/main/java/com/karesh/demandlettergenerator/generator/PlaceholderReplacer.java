@@ -179,7 +179,7 @@ public class PlaceholderReplacer {
                             safeGet(headerCellProps, 0)));
 
             // --- Column 1: TOTAL ---
-            String total = MoneyFormatter.format(tx.getUnsettledAmount());
+            String total = MoneyFormatter.format(tx.getTotalDue());
             dataRow.getContent().add(
                     buildCell(wmlObjectFactory, total,
                             safeGet(headerCellProps, 1)));

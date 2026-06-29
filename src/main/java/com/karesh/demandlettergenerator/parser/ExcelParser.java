@@ -95,9 +95,8 @@ public class ExcelParser {
 
                         if (containsText(row, TOTAL_MARKER)) {
                             currentCustomer.calculateTotalGross();
-                            currentCustomer.calculateTotalIncludingPenalty();
                             currentCustomer.calculateHighestNumberOfMonths();
-
+                            currentCustomer.calculateTotalIncludingPenalty();
                             customers.add(currentCustomer);
 
                             System.out.println("Customer Completed");
@@ -143,7 +142,7 @@ public class ExcelParser {
                             transaction.setNumberOfMonths(
                                     calculateNumberOfMonths(transaction.getDueDate()));
 
-                            transaction.calculateTotalDue();
+                            transaction.getTotalDue();
 
                             currentCustomer.getTransactions().add(transaction);
 
@@ -184,7 +183,7 @@ public class ExcelParser {
             }
 
             if (phone.isEmpty() && looksLikePhone(value)) {
-                phone = "0" + value;
+                phone = value.startsWith("0") ? value : "0" + value;
                 continue;
             }
             values.add(value);
