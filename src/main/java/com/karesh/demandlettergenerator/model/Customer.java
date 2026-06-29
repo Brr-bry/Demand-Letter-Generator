@@ -106,7 +106,7 @@ public class Customer {
         BigDecimal total = BigDecimal.ZERO;
 
         for (Transaction tx : transactions) {
-            total = total.add(tx.getUnsettledAmount());
+            total = total.add(tx.getTotalDue());
         }
 
         this.totalGross = total;
