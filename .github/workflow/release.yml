@@ -1,0 +1,84 @@
+name: Build Desktop Installers
+
+on:
+  workflow_dispatch:
+
+  push:
+    tags:
+      - "v*"
+
+jobs:
+
+  windows:
+
+    runs-on: windows-latest
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: microsoft
+          java-version: 21
+          cache: maven
+
+      - name: Build Project
+        run: mvn clean package
+
+      - name: Build Windows Installer
+        shell: cmd
+        run: |
+          jpackage ^
+            --type exe ^
+            --input target ^
+            --main-jar DemandLetterGenerator-1.0.0.jar ^
+            --main-class com.karesh.demandlettergenerator.Main ^
+            --name "Demand Letter Generator" ^
+            --vendor "Karesh" ^
+            --app-version 1.0.0 ^
+            --icon icons\app.ico ^
+            --win-shortcut ^
+            --win-menu ^
+            --win-dir-chooser ^
+            --dest installer
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DemandLetterGenerator-Windows
+          path: installer
+
+  mac:
+
+    runs-on: macos-latest
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: microsoft
+          java-version: 21
+          cache: maven
+
+      - name: Build Project
+        run: mvn clean package
+
+      - name: Build Mac Installer
+        run: |
+          jpackage \
+            --type dmg \
+            --input target \
+            --main-jar DemandLetterGenerator-1.0.0.jar \
+            --main-class com.karesh.demandlettergenerator.Main \
+            --name "Demand Letter Generator" \
+            --vendor "Karesh" \
+            --app-version 1.0.0 \
+            --icon icons/app.icns \
+            --dest installer
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DemandLetterGenerator-Mac
+          path: installer
