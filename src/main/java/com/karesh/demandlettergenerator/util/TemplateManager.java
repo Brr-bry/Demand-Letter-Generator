@@ -11,9 +11,34 @@ public class TemplateManager {
     private static final String APP_FOLDER = "DemandLetterGenerator";
 
     private static Path getTemplateFolder() {
+
+        String os = System.getProperty("os.name").toLowerCase();
+        String home = System.getProperty("user.home");
+
+        if (os.contains("win")) {
+            return Paths.get(
+                    System.getenv("LOCALAPPDATA"),
+                    "DemandLetterGenerator",
+                    "templates"
+            );
+        }
+
+        if (os.contains("mac")) {
+            return Paths.get(
+                    home,
+                    "Library",
+                    "Application Support",
+                    "DemandLetterGenerator",
+                    "templates"
+            );
+        }
+
+        // Linux
         return Paths.get(
-                System.getenv("LOCALAPPDATA"),
-                APP_FOLDER,
+                home,
+                ".local",
+                "share",
+                "DemandLetterGenerator",
                 "templates"
         );
     }
