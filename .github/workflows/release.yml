@@ -75,7 +75,7 @@ jobs:
             --name "Demand Letter Generator" \
             --vendor "Karesh" \
             --app-version 1.0.0 \
-            --icon src\main\resources\icons\app.icns \
+            --icon src/main/resources/icons/app.icns \
             --dest installer
 
       - uses: actions/upload-artifact@v4
