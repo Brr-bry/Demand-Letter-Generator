@@ -2,7 +2,9 @@ package com.karesh.demandlettergenerator.controller;
 
 import com.karesh.demandlettergenerator.service.GenerationService;
 import com.karesh.demandlettergenerator.util.OutputManager;
+import com.karesh.demandlettergenerator.util.TemplateManager;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
@@ -310,6 +312,60 @@ public class MainController {
         catch (IOException e) {
 
             e.printStackTrace();
+
+        }
+
+    }
+
+    public void editTemplate(ActionEvent event) {
+
+        try {
+
+            TemplateManager.openTemplate();
+
+        } catch (Exception ex) {
+
+            ex.printStackTrace();
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Unable to open template");
+            alert.setContentText(ex.getMessage());
+            alert.showAndWait();
+        }
+
+    }
+
+    public void restoreDefaultTemplate(ActionEvent event) {
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+
+        confirm.setHeaderText("Restore Default Template");
+
+        confirm.setContentText(
+                "This will overwrite your edited template.\n\nContinue?"
+        );
+
+        if (confirm.showAndWait().orElse(null) != ButtonType.OK) {
+            return;
+        }
+
+        try {
+
+            TemplateManager.restoreDefaultTemplate();
+
+            Alert done = new Alert(Alert.AlertType.INFORMATION);
+            done.setHeaderText(null);
+            done.setContentText("Template restored successfully.");
+            done.showAndWait();
+
+        } catch (Exception ex) {
+
+            ex.printStackTrace();
+
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setHeaderText("Restore Failed");
+            error.setContentText(ex.getMessage());
+            error.showAndWait();
 
         }
 

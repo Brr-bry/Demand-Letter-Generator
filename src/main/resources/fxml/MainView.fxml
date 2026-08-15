@@ -45,15 +45,33 @@
 
     <Separator/>
 
+    <!-- Template Section -->
+    <Label text="Template"/>
+
+    <HBox spacing="10" alignment="CENTER">
+
+        <Button
+                text="Edit Template"
+                onAction="#editTemplate"/>
+
+        <Button
+                text="Restore Default Template"
+                onAction="#restoreDefaultTemplate"/>
+
+    </HBox>
+
+    <Separator/>
+
     <Label text="Status"/>
 
     <Label
             fx:id="statusLabel"
             text="Ready"
             textAlignment="CENTER"
-            alignment="CENTER"
-        />
-    <Label wrapText="true" />
+            alignment="CENTER"/>
+
+    <Label wrapText="true"/>
+
     <Label
             fx:id="customerLabel"
             text="-"/>
@@ -62,7 +80,6 @@
             fx:id="progressBar"
             progress="0"
             prefWidth="600"/>
-
 
     <Region VBox.vgrow="ALWAYS"/>
 
