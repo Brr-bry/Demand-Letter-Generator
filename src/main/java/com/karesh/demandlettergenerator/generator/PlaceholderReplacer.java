@@ -22,7 +22,7 @@ import java.util.Map;
 public class PlaceholderReplacer {
 
     // The three header strings that identify the transaction table
-    private static final String HEADER_SO_TRA  = "S.O # / TRA";
+    private static final String HEADER_SO_TRA  = "TRA/S.O";
     private static final String HEADER_TOTAL   = "TOTAL";
     private static final String HEADER_DUE_DATE = "DUE DATE";
 
@@ -178,13 +178,9 @@ public class PlaceholderReplacer {
                     buildCell(wmlObjectFactory, soTra,
                             safeGet(headerCellProps, 0)));
 
-            // --- Column 1: TOTAL ---
-            String total = MoneyFormatter.format(tx.getTotalDue());
-            dataRow.getContent().add(
-                    buildCell(wmlObjectFactory, total,
-                            safeGet(headerCellProps, 1)));
 
-            // --- Column 2: DUE DATE ---
+
+            // --- Column 1: DUE DATE ---
             String dueDate = tx.getDueDate() != null
                     ? tx.getDueDate().format(DATE_FMT)
                     : "";
@@ -192,9 +188,15 @@ public class PlaceholderReplacer {
                     buildCell(wmlObjectFactory, dueDate,
                             safeGet(headerCellProps, 2)));
 
+            // --- Column 2: TOTAL ---
+            String total = MoneyFormatter.format(tx.getTotalDue());
+            dataRow.getContent().add(
+                    buildCell(wmlObjectFactory, total,
+                            safeGet(headerCellProps, 1)));
+
             table.getContent().add(dataRow);
 
-            System.out.println("INJECTED ROW: " + soTra + " | " + total + " | " + dueDate);
+            System.out.println("INJECTED ROW: " + soTra + " | " + dueDate + " | " + total );
         }
     }
 
@@ -314,18 +316,23 @@ public class PlaceholderReplacer {
         pPr.setJc(jc);
         paragraph.setPPr(pPr);
 
-        // --- Run (Calibri font) ---
+        // --- Run (Book Antiqua font) ---
         R run = factory.createR();
 
         RPr rPr  = factory.createRPr();
         RFonts fonts = factory.createRFonts();
-        fonts.setAscii("Calibri");
-        fonts.setHAnsi("Calibri");
-        fonts.setCs("Calibri");
+        fonts.setAscii("Book Antiqua");
+        fonts.setHAnsi("Book Antiqua");
+        fonts.setCs("Book Antiqua");
         rPr.setRFonts(fonts);
         run.setRPr(rPr);
 
-        int fontSize = 9;
+        U underline = factory.createU();
+        underline.setVal(UnderlineEnumeration.SINGLE);
+        rPr.setU(underline);
+
+        int fontSize = 12;
+
         HpsMeasure fontPt = factory.createHpsMeasure();
         fontPt.setVal(BigInteger.valueOf(fontSize * 2));
         rPr.setSz(fontPt);         // Sets size for regular/latin text
@@ -352,7 +359,7 @@ public class PlaceholderReplacer {
         CTBorder b = factory.createCTBorder();
         b.setVal(STBorder.SINGLE);
         b.setSz(java.math.BigInteger.valueOf(4));   // 4 × ⅛ pt = ½ pt
-        b.setColor("000000");                       // pure black
+        b.setColor("FFFFFF");                       // pure black
         b.setSpace(java.math.BigInteger.ZERO);
         return b;
     }
@@ -367,7 +374,7 @@ public class PlaceholderReplacer {
         String so  = tx.getSoNumber()  != null ? tx.getSoNumber().trim()  : "";
         String tra = tx.getTraNumber() != null ? tx.getTraNumber().trim() : "";
 
-        if (!so.isEmpty() && !tra.isEmpty()) return so + " / " + tra;
+        if (!so.isEmpty() && !tra.isEmpty()) return tra + " / " + so;
         if (!so.isEmpty())  return so;
         if (!tra.isEmpty()) return tra;
         return "";
@@ -397,11 +404,22 @@ public class PlaceholderReplacer {
                         .format(DateTimeFormatter.ofPattern("MMMM yyyy", Locale.ENGLISH))
                         .toUpperCase();
 
+        String currDate =
+                LocalDate.now()
+                        .format(DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH))
+                        .toUpperCase();
+
+        String traDate =customer.getOldestTransactionDueDate()
+                        .format(DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH))
+                        .toUpperCase();
+
         map.put("{{CUR_MONTH_YEAR}}", monthYear);
+        map.put("{{CUR_DATE}}", currDate);
         map.put("{{FULL_NAME}}",             StringUtils.toTitleCase(customer.getFullName()));
         map.put("{{LAST_NAME}}",             StringUtils.toTitleCase(customer.getLastName()));
         map.put("{{ADDRESS}}",               StringUtils.toTitleCase(customer.getAddress()));
         map.put("{{PHONE}}",                 customer.getPhone());
+        map.put("{{TRA_DATE}}",              traDate);
         map.put("{{TOTAL_GROSS}}",           MoneyFormatter.format(customer.getTotalGross()));
         map.put("{{TOTAL_WITH_PENALTIES}}",  MoneyFormatter.format(customer.getTotalIncludingPenalty()));
         map.put("{{TOTAL_IN_WORDS}}",        NumberToWords.convert(customer.getTotalIncludingPenalty()));
