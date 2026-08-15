@@ -409,7 +409,7 @@ public class PlaceholderReplacer {
                         .format(DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH))
                         .toUpperCase();
 
-        String traDate =customer.getOldestTransactionDueDate()
+        String traDate =customer.getOldestTransactionDate()
                         .format(DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH))
                         .toUpperCase();
 

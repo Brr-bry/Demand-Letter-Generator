@@ -19,7 +19,7 @@ public class Customer {
     private BigDecimal totalIncludingPenalty;
 
     private BigDecimal totalGross;
-    private LocalDate oldestTransactionDueDate;
+    private LocalDate oldestTransactionDate;
 
     public void setHighestNumberOfMonths(int highestNumberOfMonths) {
         this.highestNumberOfMonths = highestNumberOfMonths;
@@ -97,28 +97,28 @@ public class Customer {
         this.phone = phone;
     }
 
-    public LocalDate getOldestTransactionDueDate() {
-        return oldestTransactionDueDate;
+    public LocalDate getOldestTransactionDate() {
+        return oldestTransactionDate;
     }
 
-    public void calculateOldestTransactionDueDate() {
+    public void calculateOldestTransactionDate() {
 
         LocalDate oldest = null;
 
         for (Transaction tx : transactions) {
 
-            LocalDate dueDate = tx.getDueDate();
+            LocalDate soDate = tx.getSoDate();
 
-            if (dueDate == null) {
+            if (soDate == null) {
                 continue;
             }
 
-            if (oldest == null || dueDate.isBefore(oldest)) {
-                oldest = dueDate;
+            if (oldest == null || soDate.isBefore(oldest)) {
+                oldest = soDate;
             }
         }
 
-        this.oldestTransactionDueDate = oldest;
+        this.oldestTransactionDate = oldest;
     }
 
     public void setTransactions(List<Transaction> transactions) {
