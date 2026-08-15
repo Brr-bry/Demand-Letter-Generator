@@ -97,7 +97,7 @@ public class ExcelParser {
                             currentCustomer.calculateTotalGross();
                             currentCustomer.calculateHighestNumberOfMonths();
                             currentCustomer.calculateTotalIncludingPenalty();
-                            currentCustomer.calculateOldestTransactionDueDate();
+                            currentCustomer.calculateOldestTransactionDate();
                             customers.add(currentCustomer);
                             System.out.println("Customer Completed");
 
