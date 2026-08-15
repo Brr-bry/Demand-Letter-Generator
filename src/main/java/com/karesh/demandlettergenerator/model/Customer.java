@@ -2,6 +2,7 @@ package com.karesh.demandlettergenerator.model;
 
 import com.karesh.demandlettergenerator.util.NumberToWords;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
 import java.math.BigDecimal;
@@ -18,6 +19,7 @@ public class Customer {
     private BigDecimal totalIncludingPenalty;
 
     private BigDecimal totalGross;
+    private LocalDate oldestTransactionDueDate;
 
     public void setHighestNumberOfMonths(int highestNumberOfMonths) {
         this.highestNumberOfMonths = highestNumberOfMonths;
@@ -95,7 +97,29 @@ public class Customer {
         this.phone = phone;
     }
 
+    public LocalDate getOldestTransactionDueDate() {
+        return oldestTransactionDueDate;
+    }
 
+    public void calculateOldestTransactionDueDate() {
+
+        LocalDate oldest = null;
+
+        for (Transaction tx : transactions) {
+
+            LocalDate dueDate = tx.getDueDate();
+
+            if (dueDate == null) {
+                continue;
+            }
+
+            if (oldest == null || dueDate.isBefore(oldest)) {
+                oldest = dueDate;
+            }
+        }
+
+        this.oldestTransactionDueDate = oldest;
+    }
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
